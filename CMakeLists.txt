@@ -254,6 +254,9 @@ if (BUILD_EXAMPLES)
     include_subdirs ("examples")
 endif ()
 
+include_subdirs ("vc_service")
+include_subdirs ("vc_client")
+
 # Add tests
 if (BUILD_TESTS)
     include_subdirs ("test")
