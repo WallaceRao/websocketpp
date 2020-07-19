@@ -90,7 +90,7 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
 
   // check for a special command to instruct the server to stop listening so
   // it can be cleanly exited.
-  server::connection_ptr con = m_server.get_con_from_hdl(hdl);
+  server::connection_ptr con = s.get_con_from_hdl(hdl);
   string connection_id = con.get();
 
   shared_ptr<SessionManager> session_manager =
@@ -144,8 +144,8 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
   }
 }
 
-void on_close(connection_hdl hdl) {
-  server::connection_ptr con = m_server.get_con_from_hdl(hdl);
+void on_close(server* s, connection_hdl hdl) {
+  server::connection_ptr con = s.get_con_from_hdl(hdl);
   string connection_id = con.get();
   if (!session_manager->GetSession(connection_id, session)) {
     std::cout << "Error on_close: no existing session for " << connection_id
