@@ -239,6 +239,8 @@ static uint8 reverse_map[] = {
 int base64_encode(const uint8 *text, uint32 text_len, string &result) {
   uint32 i, j;
   uint8 *encode = new uint8[text_len * 2];
+  memset(encode, 0, text_len * 2);
+
   for (i = 0, j = 0; i + 3 <= text_len; i += 3) {
     encode[j++] =
         alphabet_map[text[i] >> 2];  //取出第一个字符的前6位并找出对应的结果字符
@@ -269,9 +271,8 @@ int base64_encode(const uint8 *text, uint32 text_len, string &result) {
       encode[j++] = '=';
     }
   }
-  string temp(j, ' ');
-  memcpy(temp.data(), encode, j);
-  result.swap(temp);
+  result = (char *)encode;
+  delete[] encode;
   return j;
 }
 
@@ -279,6 +280,7 @@ int base64_decode(const uint8 *code, uint32 code_len, string &result) {
   assert((code_len & 0x03) ==
          0);  //如果它的条件返回错误，则终止程序执行。4的倍数。
   uint8 *plain = new uint8[code_len * 2];
+  memset(plain, 0, code_len * 2);
   uint32 i, j = 0;
   uint8 quad[4];
   for (i = 0; i < code_len; i += 4) {
@@ -309,8 +311,7 @@ int base64_decode(const uint8 *code, uint32 code_len, string &result) {
           quad[3];  //取出第三个字符对应base64表的十进制数的后2位与第4个字符进行组合
     }
   }
-  string temp(j, ' ');
-  memcpy(temp.data(), plain, j);
-  result.swap(temp);
+
+  result = (char *)plain;
   return j;
 }
