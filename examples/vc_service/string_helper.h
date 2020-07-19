@@ -16,6 +16,9 @@
 
 using namespace std;
 
+typedef unsigned char uint8;
+typedef unsigned long uint32;
+
 bool ListFiles(const std::string& path, std::vector<std::string>* files);
 
 bool ListFolders(const std::string path, std::vector<std::string>* folders_path,
