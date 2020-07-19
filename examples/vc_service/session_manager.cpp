@@ -38,7 +38,7 @@ bool SessionManager::AddSession(string session_id,
 bool SessionManager::ClearSession(string session_id) {
   std::unique_lock<std::mutex> lck(map_mutex);
   auto iter = session_map.find(session_id);
-  if (iter != session_map.end) {
+  if (iter != session_map.end()) {
     session_map.erase(iter);
     printf("ClearSession succeed, id:%s,s %d sessions now\n",
            session_id.c_str(), session_map.size());
