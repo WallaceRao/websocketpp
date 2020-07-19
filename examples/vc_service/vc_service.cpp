@@ -131,9 +131,6 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
   StringToInt(sample_rate_str, sample_rate);
 
   // base64 parse
-  string token = user_name + std::to_string((int)t);
-  string md5_token, hex_token;
-  int out_byte = 0;
   request->buffer = new unsigned char[data.length() * 2];
   base64_decode((const uint8*)data.c_str(), data.length(), request->buffer,
                 request->buffer_len);

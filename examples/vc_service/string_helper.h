@@ -50,7 +50,7 @@ std::string UrlEncode(const std::string& str);
 std::string UrlDecode(const std::string& str);
 
 int base64_encode(const uint8* text, uint32 text_len, string& result);
-int base64_decode(const uint8* code, uint32 code_len, const uint8* buffer,
+int base64_decode(const uint8* code, uint32 code_len, uint8* buffer,
                   int& buffer_size);
 
 #endif

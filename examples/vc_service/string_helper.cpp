@@ -276,7 +276,7 @@ int base64_encode(const uint8 *text, uint32 text_len, string &result) {
   return j;
 }
 
-int base64_decode(const uint8 *code, uint32 code_len, const uint8 *buffer,
+int base64_decode(const uint8 *code, uint32 code_len, uint8 *buffer,
                   int &buffer_size) {
   assert((code_len & 0x03) ==
          0);  //如果它的条件返回错误，则终止程序执行。4的倍数。
