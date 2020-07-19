@@ -92,9 +92,6 @@ void send_thread(server* s, server::connection_ptr con) {
   }
   std::cout << "all data has been sent with connection: " << connection_id
             << std::endl;
-  // clear the session
-  session_manager->ClearSession(connection_id);
-  session_manager->ClearThread(connection_id);
   return;
 }
 
@@ -184,6 +181,9 @@ void on_close(server* s, websocketpp::connection_hdl hdl) {
     return;
   }
   session->StopProcess();
+  // clear the session
+  session_manager->ClearSession(connection_id);
+  session_manager->ClearThread(connection_id);
 }
 
 int main() {

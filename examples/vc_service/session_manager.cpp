@@ -65,6 +65,9 @@ bool SessionManager::ClearThread(std::string session_id) {
   std::unique_lock<std::mutex> lck(send_mutex);
   auto iter = send_threads.find(session_id);
   if (iter != send_threads.end()) {
+    if (send_threads[session_id].joinable()) {
+      send_threads[session_id].join();
+    }
     send_threads.erase(iter);
     printf("ClearThread succeed, id:%s, there is %d threads now\n",
            session_id.c_str(), send_threads.size());
