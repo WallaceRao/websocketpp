@@ -71,23 +71,25 @@ void send_thread(server* s, server::connection_ptr con) {
   bool finish = false;
   while (!finish) {
     session->GetResponse(response, finish);
-    // generate a response and send back
-    Json::Value root;
-    root["status"] = "succeed";
-    root["err_msg"] = err_msg;
+    if (response->buffer_len) {
+      // generate a response and send back
+      Json::Value root;
+      root["status"] = "succeed";
+      root["err_msg"] = err_msg;
 
-    string encoded_data;
-    base64_encode((const uint8*)response->buffer, response->buffer_len,
-                  encoded_data);
-    root["data"] = encoded_data;
-    Json::FastWriter fast_writer;
-    string response_json = fast_writer.write(root);
-    try {
-      s->send(hdl, response_json, websocketpp::frame::opcode::text);
-    } catch (websocketpp::exception const& e) {
-      std::cout << "send request for connection " << connection_id
-                << "failed because : "
-                << "(" << e.what() << ")" << std::endl;
+      string encoded_data;
+      base64_encode((const uint8*)response->buffer, response->buffer_len,
+                    encoded_data);
+      root["data"] = encoded_data;
+      Json::FastWriter fast_writer;
+      string response_json = fast_writer.write(root);
+      try {
+        s->send(hdl, response_json, websocketpp::frame::opcode::text);
+      } catch (websocketpp::exception const& e) {
+        std::cout << "send request for connection " << connection_id
+                  << "failed because : "
+                  << "(" << e.what() << ")" << std::endl;
+      }
     }
   }
   std::cout << "all data has been sent with connection: " << connection_id
