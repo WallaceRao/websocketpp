@@ -236,7 +236,7 @@ static uint8 reverse_map[] = {
     34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,  48,
     49,  50,  51,  255, 255, 255, 255, 255};
 
-uint32 base64_encode(const uint8 *text, uint32 text_len, string &result) {
+int base64_encode(const uint8 *text, uint32 text_len, string &result) {
   uint32 i, j;
   uint8 encode = new uint8[text_len * 2];
   for (i = 0, j = 0; i + 3 <= text_len; i += 3) {
@@ -275,7 +275,7 @@ uint32 base64_encode(const uint8 *text, uint32 text_len, string &result) {
   return j;
 }
 
-uint32 base64_decode(const uint8 *code, uint32 code_len, string &result) {
+int base64_decode(const uint8 *code, uint32 code_len, string &result) {
   assert((code_len & 0x03) ==
          0);  //如果它的条件返回错误，则终止程序执行。4的倍数。
   uint8 *plain = new uint8[code_len * 2];
