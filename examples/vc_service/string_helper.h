@@ -27,9 +27,6 @@ bool ListFolders(const std::string path, std::vector<std::string>* folders_path,
 void StringToInt(std::string str, int& value);
 void StringToFloat(std::string str, float& value);
 
-void MD5Hash(const std::string& srcStr, std::string& encodedStr,
-             std::string& encodedHexStr);
-
 string GetTimeString();
 
 void OrderIdToString(int value, std::string& str);

@@ -27,27 +27,6 @@ void StringToFloat(std::string str, float &value) {
   ss >> value;
 }
 
-void MD5Hash(const std::string &srcStr, std::string &encodedStr,
-             std::string &encodedHexStr) {
-  // 调用md5哈希
-  unsigned char mdStr[33] = {0};
-  MD5((const unsigned char *)srcStr.c_str(), srcStr.length(), mdStr);
-
-  // 哈希后的字符串
-  encodedStr = std::string((const char *)mdStr);
-
-  // 哈希后的十六进制串 32字节
-  char buf[65] = {0};
-  char tmp[3] = {0};
-  for (int i = 0; i < 32; i++) {
-    sprintf(tmp, "%02x", mdStr[i]);
-    strcat(buf, tmp);
-  }
-  buf[32] = '\0';  // 后面都是0，从32字节截断
-
-  encodedHexStr = std::string(buf);
-}
-
 bool IsFileExist(const string path) { return access(path.c_str(), F_OK) == 0; }
 
 bool IsDir(const std::string path) {
