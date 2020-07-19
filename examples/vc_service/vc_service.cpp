@@ -90,7 +90,7 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
 
   // check for a special command to instruct the server to stop listening so
   // it can be cleanly exited.
-  server::connection_ptr con = s.get_con_from_hdl(hdl);
+  server::connection_ptr con = s->get_con_from_hdl(hdl);
   string connection_id = con.get();
 
   shared_ptr<SessionManager> session_manager =
@@ -111,6 +111,7 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
   shared_ptr<SessionRequest> request = make_shared<SessionRequest>();
   Json::Reader reader;
   Json::Value json_object;
+  string err_msg = "";
   if (!reader.parse(request_json_str, json_object)) {
     err_msg = "Error: parse json string (" + request_json_str + ") failed";
     std::cout << err_msg << std::endl;
@@ -126,7 +127,6 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
     send_msg(s, con, err_msg);
     return;
   }
-  string sample_rate_str = json_object["sample_rate"].asString();
   int sample_rate;
   StringToInt(sample_rate_str, sample_rate);
 
@@ -135,8 +135,7 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
   base64_decode((const uint8*)data.c_str(), data.length(), request->buffer,
                 request->buffer_len);
   request->sample_rate = sample_rate;
-  memcpy(request->buffer, buf.data(), request->buffer_len);
-  session.AddToRequestQueue(request);
+  session->AddToRequestQueue(request);
   if (new_session) {
     // start a thread to send back response
     session->StartProcess();
@@ -144,8 +143,11 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
   }
 }
 
-void on_close(server* s, connection_hdl hdl) {
-  server::connection_ptr con = s.get_con_from_hdl(hdl);
+void on_close(server* s, websocketpp::connection_hdl hdl) {
+  shared_ptr<SessionManager> session_manager =
+      SessionManager::GetSessionManager();
+  server::connection_ptr con = s->get_con_from_hdl(hdl);
+  shared_ptr<Session> session;
   string connection_id = con.get();
   if (!session_manager->GetSession(connection_id, session)) {
     std::cout << "Error on_close: no existing session for " << connection_id
@@ -169,7 +171,7 @@ int main() {
     // Register our message handler
     echo_server.set_message_handler(
         bind(&on_message, &echo_server, ::_1, ::_2));
-    m_server.set_close_handler(bind(&on_close, &echo_server, ::_1);
+    echo_server.set_close_handler(bind(&on_close, &echo_server, ::_1);
 
     // Listen on port 9002
     echo_server.listen(9002);
