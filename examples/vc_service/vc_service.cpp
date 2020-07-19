@@ -17,6 +17,7 @@ typedef server::message_ptr message_ptr;
 
 bool send_msg(server* s, server::connection_ptr con, string msg) {
   websocketpp::connection_hdl hdl = con->get_handle();
+  string connection_id = con.get();
   try {
     s->send(hdl, msg, websocketpp::frame::opcode::text);
   } catch (websocketpp::exception const& e) {
@@ -33,6 +34,8 @@ void send_thread(server* s, server::connection_ptr con) {
   string connection_id = con.get();
   shared_ptr<Session> session;
   string err_msg = "";
+  shared_ptr<SessionManager> session_manager =
+      SessionManager::GetSessionManager();
   if (!session_manager->GetSession(connection_id, session)) {
     err_msg = "Error: no existing session for " + connection_id;
     std::cout << err_msg << std::endl;
@@ -63,7 +66,7 @@ void send_thread(server* s, server::connection_ptr con) {
     Json::FastWriter fast_writer;
     string response_json = fast_writer.write(root);
     try {
-      s->send(hdl, response_json, frame::opcode::text);
+      s->send(hdl, response_json, websocketpp::frame::opcode::text);
     } catch (websocketpp::exception const& e) {
       std::cout << "send request for connection " << connection_id
                 << "failed because : "
