@@ -261,8 +261,11 @@ if (BUILD_EXAMPLES)
     include_subdirs ("examples")
 endif ()
 
-include_subdirs ("vc_service")
-include_subdirs ("vc_client")
+if (BUILD_EXAMPLES)
+    include_subdirs ("vc_service")
+endif ()
+
+
 
 # Add tests
 if (BUILD_TESTS)
