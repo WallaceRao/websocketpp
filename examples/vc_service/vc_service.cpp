@@ -159,7 +159,7 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
     session_manager->AddThread(connection_id, thread_for_send);
   }
   cout << "a request has been processed to connection id:" << connection_id
-       << std::end;
+       << std::endl;
 }
 
 void on_close(server* s, websocketpp::connection_hdl hdl) {
