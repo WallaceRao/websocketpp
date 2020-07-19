@@ -67,8 +67,7 @@ void send_thread(server* s, server::connection_ptr con) {
     }
     return;
   }
-  shared_ptr<SessionResponse> response =
-      std::make_shared<SessionResponse> response;
+  shared_ptr<SessionResponse> response = std::make_shared<SessionResponse>();
   bool finish = false;
   while (!finish) {
     session->GetResponse(response, finish);
