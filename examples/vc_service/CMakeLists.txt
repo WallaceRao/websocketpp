@@ -17,7 +17,7 @@ include_directories(${INC_DIR})
 link_directories(${LINK_DIR})
 
 target_link_libraries(vc_service "${TORCH_LIBRARIES}")
-target_link_libraries(${TARGET_NAME} vc_engine)
+target_link_libraries(${TARGET_NAME} libvc_engine.so)
 
 #build_executable (vc_service ${SOURCE_FILES} ${HEADER_FILES})
 
