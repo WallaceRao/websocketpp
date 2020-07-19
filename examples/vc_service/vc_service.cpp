@@ -94,6 +94,7 @@ void send_thread(server* s, server::connection_ptr con) {
             << std::endl;
   // clear the session
   session_manager->ClearSession(connection_id);
+  session_manager->ClearThread(connection_id);
   return;
 }
 
@@ -154,7 +155,8 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
   if (new_session) {
     // start a thread to send back response
     session->StartProcess();
-    std::thread(&send_thread, s, con);
+    std::thread thread_for_send = std::thread(&send_thread, s, con);
+    session_manager->AddThread(connection_id, thread_for_send);
   }
   cout << "a request has been processed to connection id:" << connection_id
        << std::end;
