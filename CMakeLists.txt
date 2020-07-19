@@ -75,8 +75,11 @@ include (CMakeHelpers)
 option (ENABLE_CPP11 "Build websocketpp with CPP11 features enabled." TRUE)
 option (BUILD_EXAMPLES "Build websocketpp examples." FALSE)
 option (BUILD_TESTS "Build websocketpp tests." FALSE)
+option (BUILD_VC_SERVICE "Build websocketpp vc service." TRUE)
 
-if (BUILD_TESTS OR BUILD_EXAMPLES)
+
+
+if (BUILD_TESTS OR BUILD_EXAMPLES OR BUILD_VC_SERVICE)
 
     enable_testing ()
 
@@ -164,6 +167,10 @@ if (BUILD_TESTS OR BUILD_EXAMPLES)
     endif ()
 
     if (BUILD_EXAMPLES)
+        list (APPEND WEBSOCKETPP_BOOST_LIBS random)
+    endif()
+
+    if (BUILD_VC_SERVICE)
         list (APPEND WEBSOCKETPP_BOOST_LIBS random)
     endif()
 
