@@ -55,7 +55,7 @@ bool SessionManager::AddThread(string session_id, std::thread &thread) {
            session_id.c_str());
     return false;
   }
-  send_threads[session_id] = thread;
+  send_threads[session_id] = std::move(thread);
   printf("AddThread succeed, id:%s,there is %d threads now\n",
          session_id.c_str(), send_threads.size());
   return true;
