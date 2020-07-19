@@ -30,7 +30,7 @@ bool SessionManager::AddSession(string session_id,
     return false;
   }
   session_map[session_id] = session;
-  printf("AddSession succeed, id:%s,s %d sessions now\n", session_id.c_str(),
+  printf("AddSession succeed, id:%s,there is %d sessions now\n", session_id.c_str(),
          session_map.size());
   return true;
 }
@@ -40,7 +40,7 @@ bool SessionManager::ClearSession(string session_id) {
   auto iter = session_map.find(session_id);
   if (iter != session_map.end()) {
     session_map.erase(iter);
-    printf("ClearSession succeed, id:%s,s %d sessions now\n",
+    printf("ClearSession succeed, id:%s, there is %d sessions now\n",
            session_id.c_str(), session_map.size());
     return true;
   }
