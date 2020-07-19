@@ -156,6 +156,7 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
   if (new_session) {
     // start a thread to send back response
     session->StartProcess();
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     std::thread thread_for_send(&send_thread, s, con);
     session_manager->AddThread(connection_id, thread_for_send);
   }
