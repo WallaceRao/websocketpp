@@ -148,6 +148,7 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
     // create a new session and pass it to manager
     new_session = true;
     session = make_shared<Session>();
+    session->session_id = connection_id;
     session_manager->AddSession(connection_id, session);
   }
   cout << "pending a request to connection id:" << connection_id << std::endl;
