@@ -121,6 +121,7 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
     return;
   }
   string data = json_object["data"].asString();
+
   string sample_rate_str = json_object["sample_rate"].asString();
   if (data.empty() || sample_rate_str.empty()) {
     err_msg = "Error: no data or sample rate field found in json string (" +
@@ -134,8 +135,14 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
 
   // base64 parse
   request->buffer = new unsigned char[data.length() * 2];
-  base64_decode((const uint8*)data.c_str(), data.length(), request->buffer,
-                request->buffer_len);
+  int decode_result = base64_decode((const uint8*)data.c_str(), data.length(),
+                                    request->buffer, request->buffer_len);
+  if (decode_result < 0) {
+    err_msg = "Error: decode data field failed";
+    std::cout << err_msg << std::endl;
+    send_msg(s, con, err_msg);
+    return;
+  }
   printf("after base64 decode, data size:%d\n", request->buffer_len);
   request->sample_rate = sample_rate;
   shared_ptr<SessionManager> session_manager =

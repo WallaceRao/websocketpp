@@ -257,8 +257,10 @@ int base64_encode(const uint8 *text, uint32 text_len, string &result) {
 
 int base64_decode(const uint8 *code, uint32 code_len, uint8 *buffer,
                   int &buffer_size) {
-  assert((code_len & 0x03) ==
-         0);  //如果它的条件返回错误，则终止程序执行。4的倍数。
+  if ((code_len & 0x03) != 0) {
+    return -1;
+  }
+
   uint8 *plain = new uint8[code_len * 2];
   memset(plain, 0, code_len * 2);
   uint32 i, j = 0;
@@ -268,8 +270,9 @@ int base64_decode(const uint8 *code, uint32 code_len, uint8 *buffer,
       quad[k] = reverse_map
           [code[i + k]];  //分组，每组四个分别依次转换为base64表内的十进制数
     }
-
-    assert(quad[0] < 64 && quad[1] < 64);
+    if (quad[0] >= 64 || quad[1] >= 64) {
+      return -1;
+    }
 
     plain[j++] =
         (quad[0] << 2) |
