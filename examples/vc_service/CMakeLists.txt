@@ -19,6 +19,7 @@ build_executable (vc_service ${SOURCE_FILES} ${HEADER_FILES})
 
 target_link_libraries(vc_service ${TORCH_LIBRARIES})
 target_link_libraries(vc_service vc_engine)
+target_link_libraries(vc_service jsoncpp)
 
 #build_executable (vc_service ${SOURCE_FILES} ${HEADER_FILES})
 
