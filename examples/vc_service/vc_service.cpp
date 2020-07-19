@@ -22,7 +22,9 @@ string GetSessionId(void* p) {
   stringstream stringtest;
   stringtest.clear();
   stringtest << p;
-  stringtest >> result;
+  string temp;
+  stringtest >> temp;
+  result = md5_hash_hex(temp);
   return result;
 }
 
@@ -97,7 +99,8 @@ void send_thread(server* s, server::connection_ptr con) {
 // Define a callback to handle incoming messages
 void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
   std::cout << "on_message called with hdl: " << hdl.lock().get()
-            << " and message: " << msg->get_payload() << std::endl;
+            << " and message length: " << msg->get_payload().length()
+            << std::endl;
 
   // check for a special command to instruct the server to stop listening so
   // it can be cleanly exited.
