@@ -15,7 +15,7 @@ class SessionManager {
   map<string, shared_ptr<Session>> session_map;
   bool GetSession(string session_id, shared_ptr<Session> &session);
   bool AddSession(string session_id, shared_ptr<Session> session);
-  void ClearSession(string session_id);
+  bool ClearSession(string session_id);
 
   static shared_ptr<SessionManager> GetSessionManager();
 };
