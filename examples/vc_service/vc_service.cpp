@@ -104,20 +104,6 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
   server::connection_ptr con = s->get_con_from_hdl(hdl);
   string connection_id = GetSessionId(con.get());
 
-  shared_ptr<SessionManager> session_manager =
-      SessionManager::GetSessionManager();
-  shared_ptr<Session> session;
-  bool new_session = false;
-  if (session_manager->GetSession(connection_id, session)) {
-    new_session = false;
-  } else {
-    // create a new session and pass it to manager
-    new_session = true;
-    session = make_shared<Session>();
-    session_manager->AddSession(connection_id, session);
-  }
-
-  // construct a session request and add to session
   string request_json_str = msg->get_payload();
   shared_ptr<SessionRequest> request = make_shared<SessionRequest>();
   Json::Reader reader;
@@ -146,6 +132,20 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
   base64_decode((const uint8*)data.c_str(), data.length(), request->buffer,
                 request->buffer_len);
   request->sample_rate = sample_rate;
+  shared_ptr<SessionManager> session_manager =
+      SessionManager::GetSessionManager();
+  shared_ptr<Session> session;
+  // construct a session request and add to session
+  bool new_session = false;
+  if (session_manager->GetSession(connection_id, session)) {
+    new_session = false;
+  } else {
+    // create a new session and pass it to manager
+    new_session = true;
+    session = make_shared<Session>();
+    session_manager->AddSession(connection_id, session);
+  }
+
   session->AddToRequestQueue(request);
   if (new_session) {
     // start a thread to send back response
