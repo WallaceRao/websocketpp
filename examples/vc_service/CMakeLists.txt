@@ -21,7 +21,7 @@ target_link_libraries(vc_service vc_engine)
 
 #build_executable (vc_service ${SOURCE_FILES} ${HEADER_FILES})
 
-link_boost ()
+#link_boost ()
 #final_target ()
 
 set_target_properties(vc_service PROPERTIES FOLDER "examples")
