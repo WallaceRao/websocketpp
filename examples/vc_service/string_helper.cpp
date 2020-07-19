@@ -276,7 +276,8 @@ int base64_encode(const uint8 *text, uint32 text_len, string &result) {
   return j;
 }
 
-int base64_decode(const uint8 *code, uint32 code_len, string &result) {
+int base64_decode(const uint8 *code, uint32 code_len, const uint8 *buffer,
+                  int &buffer_size) {
   assert((code_len & 0x03) ==
          0);  //如果它的条件返回错误，则终止程序执行。4的倍数。
   uint8 *plain = new uint8[code_len * 2];
@@ -311,7 +312,7 @@ int base64_decode(const uint8 *code, uint32 code_len, string &result) {
           quad[3];  //取出第三个字符对应base64表的十进制数的后2位与第4个字符进行组合
     }
   }
-
-  result = (char *)plain;
+  memcpy(buffer, plain, j);
+  delete[] plain;
   return j;
 }

@@ -61,8 +61,11 @@ void send_thread(server* s, server::connection_ptr con) {
     Json::Value root;
     root["status"] = "succeed";
     root["err_msg"] = err_msg;
-    string encoded_data = Base64Encode(response->buffer, response->buffer_len);
-    root["data"] = "";
+
+    string encoded_data;
+    base64_encode((const uint8*)response->buffer, response->buffer_len,
+                  encoded_data);
+    root["data"] = encoded_data;
     Json::FastWriter fast_writer;
     string response_json = fast_writer.write(root);
     try {
@@ -131,9 +134,9 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
   string token = user_name + std::to_string((int)t);
   string md5_token, hex_token;
   int out_byte = 0;
-  string buf = Base64Decode(data.data(), data.length(), out_byte);
-  request->buffer_len = buf.length();
-  request->buffer = new unsigned char[request->buffer_len];
+  request->buffer = new unsigned char[data.length() * 2];
+  base64_decode((const uint8*)data.c_str(), data.length(), request->buffer,
+                request->buffer_len);
   request->sample_rate = sample_rate;
   memcpy(request->buffer, buf.data(), request->buffer_len);
   session.AddToRequestQueue(request);
