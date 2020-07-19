@@ -189,7 +189,7 @@ int main() {
     echo_server.set_close_handler(bind(&on_close, &echo_server, ::_1));
 
     // Listen on port 9002
-    echo_server.listen(9002);
+    echo_server.listen(websocketpp::lib::asio::ip::tcp::v4(), 9002);
 
     // Start the server accept loop
     echo_server.start_accept();
