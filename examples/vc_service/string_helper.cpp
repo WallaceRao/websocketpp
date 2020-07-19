@@ -292,6 +292,7 @@ int base64_decode(const uint8 *code, uint32 code_len, uint8 *buffer,
     }
   }
   memcpy(buffer, plain, j);
+  buffer_size = j;
   delete[] plain;
   return j;
 }
