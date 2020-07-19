@@ -21,7 +21,7 @@ class SessionManager {
   bool AddSession(string session_id, shared_ptr<Session> session);
   bool ClearSession(string session_id);
 
-  bool AddThread(string session_id, shared_ptr<Session> session);
+  bool AddThread(string session_id, std::thread &thread);
   bool ClearThread(string session_id);
 
   static shared_ptr<SessionManager> GetSessionManager();

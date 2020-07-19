@@ -61,7 +61,7 @@ bool SessionManager::AddThread(string session_id, std::thread &thread) {
   return true;
 }
 
-bool SessionManager::ClearThread(std::thread &thread) {
+bool SessionManager::ClearThread(std::string session_id) {
   std::unique_lock<std::mutex> lck(thread_mutex);
   auto iter = send_threads.find(session_id);
   if (iter != send_threads.end()) {
