@@ -8,6 +8,7 @@
 
 typedef websocketpp::server<websocketpp::config::asio> server;
 
+using websocketpp::frame;
 using websocketpp::lib::bind;
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
@@ -16,6 +17,7 @@ using websocketpp::lib::placeholders::_2;
 typedef server::message_ptr message_ptr;
 
 bool send_msg(server* s, server::connection_ptr con, string msg) {
+  websocketpp::connection_hdl hdl = con->get_handle();
   try {
     s->send(hdl, msg, frame::opcode::text);
   } catch (websocketpp::exception const& e) {
@@ -28,6 +30,7 @@ bool send_msg(server* s, server::connection_ptr con, string msg) {
 }
 
 void send_thread(server* s, server::connection_ptr con) {
+  websocketpp::connection_hdl hdl = con->get_handle();
   string connection_id = con.get();
   shared_ptr<Session> session;
   string err_msg = "";
