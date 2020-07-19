@@ -16,12 +16,13 @@ bool SessionManager::GetSession(string session_id,
     session = session_map[session_id];
     return true;
   }
-  printf("GetSession failed: no session exist with id:%d\n",
+  printf("GetSession failed: no session exist with id:%s\n",
          session_id.c_str());
   return false;
 }
 
-bool AddSession(string session_id, shared_ptr<Session> session) {
+bool SessionManager::AddSession(string session_id,
+                                shared_ptr<Session> session) {
   std::unique_lock<std::mutex> lck(map_mutex);
   if (session_map.count(session_id)) {
     printf("AddSession failed: session alreay exist, id:%s\n",
