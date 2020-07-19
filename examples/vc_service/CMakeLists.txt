@@ -5,10 +5,6 @@ file (GLOB HEADER_FILES *.hpp)
 #init_target (vc_service)
 
 
-add_executable(vc_service  ${SOURCE_FILES})
-
-
-
 set(LINK_DIR /home/ec2-user/vc_engine/vc_demo/build)
 set(INC_DIR /home/ec2-user/vc_engine/vc_demo/include)
 
@@ -16,8 +12,12 @@ set(INC_DIR /home/ec2-user/vc_engine/vc_demo/include)
 include_directories(${INC_DIR})
 link_directories(${LINK_DIR})
 
-target_link_libraries(vc_service "${TORCH_LIBRARIES}")
-target_link_libraries(${TARGET_NAME} libvc_engine.so)
+
+add_executable(vc_service  ${SOURCE_FILES})
+
+
+target_link_libraries(vc_service ${TORCH_LIBRARIES})
+target_link_libraries(vc_service vc_engine)
 
 #build_executable (vc_service ${SOURCE_FILES} ${HEADER_FILES})
 
