@@ -18,5 +18,5 @@ class SessionManager {
   void ClearSession(string session_id);
 
   static shared_ptr<SessionManager> GetSessionManager();
-}
+};
 #endif  // SESSION_MANAGER_H
