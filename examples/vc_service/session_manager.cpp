@@ -49,7 +49,7 @@ bool SessionManager::ClearSession(string session_id) {
 }
 
 bool SessionManager::AddThread(string session_id, std::thread &thread) {
-  std::unique_lock<std::mutex> lck(thread_mutex);
+  std::unique_lock<std::mutex> lck(send_mutex);
   if (send_threads.count(session_id)) {
     printf("AddThread failed: thread alreay exist, id:%s\n",
            session_id.c_str());
@@ -62,7 +62,7 @@ bool SessionManager::AddThread(string session_id, std::thread &thread) {
 }
 
 bool SessionManager::ClearThread(std::string session_id) {
-  std::unique_lock<std::mutex> lck(thread_mutex);
+  std::unique_lock<std::mutex> lck(send_mutex);
   auto iter = send_threads.find(session_id);
   if (iter != send_threads.end()) {
     send_threads.erase(iter);
