@@ -8,7 +8,6 @@
 
 typedef websocketpp::server<websocketpp::config::asio> server;
 
-using websocketpp::frame;
 using websocketpp::lib::bind;
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
@@ -19,7 +18,7 @@ typedef server::message_ptr message_ptr;
 bool send_msg(server* s, server::connection_ptr con, string msg) {
   websocketpp::connection_hdl hdl = con->get_handle();
   try {
-    s->send(hdl, msg, frame::opcode::text);
+    s->send(hdl, msg, websocketpp::frame::opcode::text);
   } catch (websocketpp::exception const& e) {
     std::cout << "send request (" << msg << ") for connection " << connection_id
               << "failed because : "
@@ -43,7 +42,7 @@ void send_thread(server* s, server::connection_ptr con) {
     Json::FastWriter fast_writer;
     string response_json = fast_writer.write(root);
     try {
-      s->send(hdl, response_json, frame::opcode::text);
+      s->send(hdl, response_json, websocketpp::frame::opcode::text);
     } catch (websocketpp::exception const& e) {
       std::cout << "send request for connection " << connection_id
                 << "failed because : "
