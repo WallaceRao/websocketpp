@@ -2,22 +2,33 @@
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/server.hpp>
 
+#include <sstream>
 #include "json/json.h"
 #include "session_manager.h"
 #include "string_helper.h"
 
 typedef websocketpp::server<websocketpp::config::asio> server;
+typedef server::message_ptr message_ptr;
 
 using websocketpp::lib::bind;
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
 
 // pull out the type of messages sent by our config
-typedef server::message_ptr message_ptr;
+using namespace std;
+
+string GetSessionId(void* p) {
+  string result;
+  stringstream stringtest;
+  stringtest.clear();
+  stringtest << p;
+  stringtest >> result;
+  return result;
+}
 
 bool send_msg(server* s, server::connection_ptr con, string msg) {
   websocketpp::connection_hdl hdl = con->get_handle();
-  string connection_id = con.get();
+  string connection_id = GetSessionId(con.get());
   try {
     s->send(hdl, msg, websocketpp::frame::opcode::text);
   } catch (websocketpp::exception const& e) {
@@ -31,7 +42,7 @@ bool send_msg(server* s, server::connection_ptr con, string msg) {
 
 void send_thread(server* s, server::connection_ptr con) {
   websocketpp::connection_hdl hdl = con->get_handle();
-  string connection_id = con.get();
+  string connection_id = GetSessionId(con.get());
   shared_ptr<Session> session;
   string err_msg = "";
   shared_ptr<SessionManager> session_manager =
@@ -91,7 +102,7 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
   // check for a special command to instruct the server to stop listening so
   // it can be cleanly exited.
   server::connection_ptr con = s->get_con_from_hdl(hdl);
-  string connection_id = con.get();
+  string connection_id = GetSessionId(con.get());
 
   shared_ptr<SessionManager> session_manager =
       SessionManager::GetSessionManager();
@@ -148,7 +159,7 @@ void on_close(server* s, websocketpp::connection_hdl hdl) {
       SessionManager::GetSessionManager();
   server::connection_ptr con = s->get_con_from_hdl(hdl);
   shared_ptr<Session> session;
-  string connection_id = con.get();
+  string connection_id = GetSessionId(con.get());
   if (!session_manager->GetSession(connection_id, session)) {
     std::cout << "Error on_close: no existing session for " << connection_id
               << std::endl;
@@ -171,7 +182,7 @@ int main() {
     // Register our message handler
     echo_server.set_message_handler(
         bind(&on_message, &echo_server, ::_1, ::_2));
-    echo_server.set_close_handler(bind(&on_close, &echo_server, ::_1);
+    echo_server.set_close_handler(bind(&on_close, &echo_server, ::_1));
 
     // Listen on port 9002
     echo_server.listen(9002);
