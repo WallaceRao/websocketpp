@@ -261,7 +261,7 @@ if (BUILD_EXAMPLES)
     include_subdirs ("examples")
 endif ()
 
-if (BUILD_EXAMPLES)
+if (BUILD_VC_SERVICE)
     include_subdirs ("vc_service")
 endif ()
 
