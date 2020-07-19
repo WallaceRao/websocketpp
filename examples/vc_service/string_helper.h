@@ -46,7 +46,7 @@ std::string UrlEncode(const std::string& str);
 
 std::string UrlDecode(const std::string& str);
 
-string Base64Encode(const unsigned char* Data, int DataByte);
-string Base64Decode(const char* Data, int DataByte, int& OutByte);
+uint32 base64_encode(const uint8* text, uint32 text_len, string& result);
+uint32 base64_decode(const uint8* code, uint32 code_len, string& result);
 
 #endif
