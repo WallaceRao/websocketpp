@@ -238,7 +238,7 @@ static uint8 reverse_map[] = {
 
 int base64_encode(const uint8 *text, uint32 text_len, string &result) {
   uint32 i, j;
-  uint8 encode = new uint8[text_len * 2];
+  uint8 *encode = new uint8[text_len * 2];
   for (i = 0, j = 0; i + 3 <= text_len; i += 3) {
     encode[j++] =
         alphabet_map[text[i] >> 2];  //取出第一个字符的前6位并找出对应的结果字符
