@@ -11,8 +11,8 @@ set(INC_DIR /home/ec2-user/vc_engine/vc_demo/include)
 include_directories(${INC_DIR})
 link_directories(${LINK_DIR})
 
-target_link_libraries(vc_service "${TORCH_LIBRARIES}")
-target_link_libraries(vc_service vc_engine)
+target_link_libraries(${TARGET_NAME} "${TORCH_LIBRARIES}")
+target_link_libraries(${TARGET_NAME} vc_engine)
 
 build_executable (${TARGET_NAME} ${SOURCE_FILES} ${HEADER_FILES})
 
