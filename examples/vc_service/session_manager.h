@@ -13,9 +13,16 @@ class SessionManager {
  public:
   std::mutex map_mutex;
   map<string, shared_ptr<Session>> session_map;
+
+  std::mutex send_mutex;
+  map<string, std::thread> send_threads;
+
   bool GetSession(string session_id, shared_ptr<Session> &session);
   bool AddSession(string session_id, shared_ptr<Session> session);
   bool ClearSession(string session_id);
+
+  bool AddThread(string session_id, shared_ptr<Session> session);
+  bool ClearThread(string session_id);
 
   static shared_ptr<SessionManager> GetSessionManager();
 };

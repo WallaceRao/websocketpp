@@ -149,13 +149,15 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
     session = make_shared<Session>();
     session_manager->AddSession(connection_id, session);
   }
-
+  cout << "pending a request to connection id:" << connection_id << std::end;
   session->AddToRequestQueue(request);
   if (new_session) {
     // start a thread to send back response
     session->StartProcess();
     std::thread(&send_thread, s, con);
   }
+  cout << "a request has been processed to connection id:" << connection_id
+       << std::end;
 }
 
 void on_close(server* s, websocketpp::connection_hdl hdl) {
